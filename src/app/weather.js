@@ -81,6 +81,7 @@ function weather( cityId, el ) {
     console.log(locations);
   }
 
+//function to get the weather data based upon city id
   function getWeatherData( cityId ) {
     let query = buildWeatherQuery( cityId );
     // send request to Yahoo
@@ -96,6 +97,7 @@ function weather( cityId, el ) {
     xhr.send();
   }
 
+//this function renders the weather data on the grids on html
   function render(weatherData){
     const weather = JSON.parse(weatherData);
     const iconsData = icons;
@@ -116,6 +118,7 @@ function weather( cityId, el ) {
     today.classList.add('block', 'today');
 
     let desc = `${result[0].description}` ;
+    //different animations based upon the weather forecast
     var forecastToday = `<i class="wi ${result[0].class}"></i>
         <div class="weather type-small">
 
@@ -463,8 +466,8 @@ function weather( cityId, el ) {
         <h4>${day.day}, ${day.date}</h4>
         <p>${day.text}</p>
         <ul>
-          <li>High: ${day.high} &deg;C.</li>
-          <li>Low: ${day.low} &deg;C.</li>
+          <li>High: ${day.high} &deg;F.</li>
+          <li>Low: ${day.low} &deg;F.</li>
         </ul>
         </div>
       </div>`;
