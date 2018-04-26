@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+//const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack'); //to access built-in plugins
 
 module.exports = {
@@ -15,11 +16,13 @@ module.exports = {
              },
              {
                   test: /\.css$/,
-                  use: ['style-loader', 'css-loader']
+                  //use: ['style-loader', 'css-loader']
+                  use: [ MiniCSSExtractPlugin.loader, 'css-loader']
                 },
               {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+              //  use: ['style-loader', 'css-loader', 'sass-loader']
+              use: [ MiniCSSExtractPlugin.loader, 'css-loader', 'sass-loader']
               }
          ]
 
@@ -27,8 +30,8 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({template: './src/public/index.html'}),
-    new ExtractTextPlugin({ 
-      filename: 'dist/[name].bundle.css',
+    new MiniCSSExtractPlugin({
+      filename: './dist/[name].bundle.css',
       allChunks: true,
     }),
   ],
@@ -36,7 +39,7 @@ module.exports = {
       contentBase: './src',  //source of static assets
       port: 7700, // port to run dev-server
   },
-  entry: './src/app/weather.js',
+  entry: './src/app/index.js',
   mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist'),

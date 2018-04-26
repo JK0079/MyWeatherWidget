@@ -1,7 +1,5 @@
 
-var x = require('../style/style.scss');
-
-
+//main function taking cityId and the element on the html as parameters
 function weather( cityId, el ) {
 
   const container = document.getElementById(el);
@@ -23,10 +21,10 @@ function weather( cityId, el ) {
     list.innerHTML = '';
   }
 
-//function to build the weather query
+//function to build the weather query based upon cityId
   function buildWeatherQuery( cityId ) {
     const base_url = 'http://query.yahooapis.com/v1/public/yql';
-    const query = encodeURIComponent(`select * from weather.forecast where woeid=${cityId} AND u="c"`);
+    const query = encodeURIComponent(`select * from weather.forecast where woeid=${cityId} AND u="f"`);
     const query_url = `${base_url}?q=${query}&format=json`;
     return query_url;
   }
