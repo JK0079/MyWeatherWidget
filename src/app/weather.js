@@ -1,7 +1,8 @@
 var myWeatherWidget = {
 //main function taking cityId and the element on the html as parameters
 //displayWeather: function weather( cityId, el ) {
-displayWeather: function weather( context ) {
+displayWeather:  function weather( context ) {
+  myWeatherWidget.displayWeather = function(){};
   const cityId = context.cityId
   const el = context.el;
   const container = document.getElementById(el);
