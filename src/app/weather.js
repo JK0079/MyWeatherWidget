@@ -1,10 +1,13 @@
-
+var myWeatherWidget = {
 //main function taking cityId and the element on the html as parameters
-function weather( cityId, el ) {
-
+//displayWeather: function weather( cityId, el ) {
+displayWeather: function weather( context ) {
+  const cityId = context.cityId
+  const el = context.el;
   const container = document.getElementById(el);
   const forecast = document.getElementById('forecast');
   const list = document.getElementById('locations');
+  const forecastHeader = document.getElementById('forecastHeading');
   let t;
 
 //event binding function for typing in search items
@@ -24,7 +27,7 @@ function weather( cityId, el ) {
 //function to build the weather query based upon cityId
   function buildWeatherQuery( cityId ) {
     const base_url = 'http://query.yahooapis.com/v1/public/yql';
-    const query = encodeURIComponent(`select * from weather.forecast where woeid=${cityId} AND u="f"`);
+    const query = encodeURIComponent(`select * from weather.forecast where woeid=${cityId} AND u="f" `);
     const query_url = `${base_url}?q=${query}&format=json`;
     return query_url;
   }
@@ -40,19 +43,42 @@ function weather( cityId, el ) {
 
 //function to get the locations based upon the typed in search
   function getLocations( searchTerm ){
-    let query = buildLocationQuery( searchTerm );
-    // send request to Yahoo
-    let xhr = new XMLHttpRequest();
-    xhr.overrideMimeType('application/json');
-    xhr.open('GET', query, true);
+    const zipCodeRegex = /^[0-9]{5}(?:-[0-9]{4})?$/;
+    if(zipCodeRegex.test(searchTerm))
+    {
+      container.innerHTML = ``
+        let query = buildLocationQuery( searchTerm );
+        // send request to Yahoo
+        let xhr = new XMLHttpRequest();
+        xhr.overrideMimeType('application/json');
+        xhr.open('GET', query, true);
 
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && xhr.status == '200') {
-        // console.log('data', xhr.responseText);
-        showLocations(xhr.responseText);
-      }
-    };
-    xhr.send();
+        xhr.onreadystatechange = function () {
+          xhr.status = 400;
+          if (xhr.readyState == 4 && xhr.status == '200') {
+            // console.log('data', xhr.responseText);
+            container.innerHTML = ``;
+            showLocations(xhr.responseText);
+          //  xhr.send();
+          }
+          else {
+            list.innerHTML = ``;
+            container.innerHTML = `<h1 align="center">Our system is currently experiencing some technical difficulty. Please try again later!</h1>`;
+
+            forecast.innerHTML=``;
+            forecastHeader.innerHTML=``;
+          }
+        };
+        xhr.send();
+  }
+  else {
+
+    container.innerHTML = `<h1 align="center">Welcome! Find out the weather today: Please enter a valid US ZIP Code</h1>`;
+    list.innerHTML = ``;
+    forecast.innerHTML=``;
+    forecastHeader.innerHTML=``;
+
+  }
   }
 
 //function to show list of locations based upon typed in search items
@@ -92,6 +118,13 @@ function weather( cityId, el ) {
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == '200') {
         render(xhr.responseText);
+      }
+      else {
+        list.innerHTML = ``;
+        container.innerHTML = `<h1 align="center">Our system is currently experiencing some technical difficulty. Please try again later!</h1>`;
+
+        forecast.innerHTML=``;
+        forecastHeader.innerHTML=``;
       }
     };
     xhr.send();
@@ -479,4 +512,5 @@ function weather( cityId, el ) {
   setupEventBindings();
   // start with default city it
   getWeatherData( cityId );
+}
 }

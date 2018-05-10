@@ -14,7 +14,7 @@
     <h1 align="center" font-family="Raleway Dots">Weather Widget</h1>
     <form action="" id="weather-form" align="center">
       <label for="search">Search for a city:</label><br>
-      <input type="text" placeholder="Search for a city" id="search">
+      <input type="text" size="10" placeholder="Search for a city" id="search" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain numbers and/or alphabets">
     </form>
     <div align="center">
     <ul id="locations" ></ul>
@@ -24,8 +24,10 @@
   <div class="container">
     <div id="weather" class="grid">
     </div>
-    <h3 align="center">Forecast:</h3>
+
+    <h3 align="center" id="forecastHeading">Forecast:</h3>
     <div id="forecast" class="grid"></div>
+
   </div>
 
   <script src="../app/weather.js"></script>
@@ -280,7 +282,8 @@
       ]
     };
     const McLean = '2347605';
-    weather( McLean , 'weather' );
+    var weatherToday = new myWeatherWidget.displayWeather({cityId:'2347605' , el:'weather' });
+
   </script>
 </body>
 </html>
